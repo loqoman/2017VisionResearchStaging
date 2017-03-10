@@ -4,6 +4,7 @@ import argparse
 import cv2
 import time
 
+circle_inc = 1
 cap = cv2.VideoCapture(0) # Set Capture Device, in case of a USB Webcam try 1, or give -1 to get a list of available devices
 
 #Set Width and Height 
@@ -32,7 +33,7 @@ while(True):
 	
 	kernel = np.ones((3,3),np.uint8)
 	
-	gray = cv2.erode(gray,kernel,iterations = 1)	
+	gray = cv2.erode(gray,kernel,iterations = 1)
 	# gray = erosion
 	
 	gray = cv2.dilate(gray,kernel,iterations = 1)	
@@ -43,7 +44,7 @@ while(True):
 	# print img_size
 	
 	# detect circles in the image
-	circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 260, param1=30, param2=65, minRadius=0, maxRadius=0)
+	circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 200, param1=30, param2=65, minRadius=25, maxRadius=150)
 	# print circles
 	
 	# ensure at least some circles were found
@@ -51,6 +52,7 @@ while(True):
 		# convert the (x, y) coordinates and radius of the circles to integers
 		circles = np.round(circles[0, :]).astype("int")
 		
+		circle_inc = 1
 		# loop over the (x, y) coordinates and radius of the circles
 		for (x, y, r) in circles:
 			# draw the circle in the output image, then draw a rectangle in the image
@@ -58,6 +60,9 @@ while(True):
 			cv2.circle(output, (x, y), r, (0, 255, 0), 4)
 			cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
 			#time.sleep(0.5)
+			print "This is circle:"
+			print circle_inc #Making shure we can list all the circles
+
 			print "Column Number: "
 			print x
 			print "Row Number: "
@@ -65,9 +70,10 @@ while(True):
 			print "Radius is: "
 			print r
 
+			circle_inc += 1
 	# Display the resulting frame
-		cv2.imshow('gray',gray)
-    	cv2.imshow('frame',output)
+	cv2.imshow('gray',gray)
+	cv2.imshow('frame',output)
  	if cv2.waitKey(1) & 0xFF == ord('q'):
 		break
 
