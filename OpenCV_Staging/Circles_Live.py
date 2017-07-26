@@ -44,9 +44,12 @@ while(True):
 	# print img_size
 	
 	# detect circles in the image
-	circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 200, param1=30, param2=65, minRadius=25, maxRadius=150)
+	circles = cv2.HoughCircles(gray, cv2.cv.CV_HOUGH_GRADIENT, 1, 200, param1=30, param2=65, minRadius=25, maxRadius=150)
 	# print circles
-	
+	# Demo params:
+	# (After the 1[dp]) - 200, or 100*
+	# Min Radius = 5
+	# Max Radius = 200
 	# ensure at least some circles were found
 	if circles is not None:
 		# convert the (x, y) coordinates and radius of the circles to integers

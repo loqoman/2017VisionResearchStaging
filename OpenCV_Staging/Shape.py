@@ -9,6 +9,8 @@ while(True):
 
     ret,thresh = cv2.threshold(frame,127,255,1)
     
+    thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
+
     contours,h = cv2.findContours(thresh,1,2)
     #params.filterByColor = 1
     #params.blobColor = 200
@@ -22,24 +24,24 @@ while(True):
         print len(approx)
         if len(approx)==5:
             print "pentagon"
-            cv2.drawContours(gray,[cnt],0,255,-1)
+            cv2.drawContours(thresh,[cnt],0,255,-1)
         elif len(approx)==3:
             print "triangle"
-            cv2.drawContours(gray,[cnt],0,(0,255,0),-1)
+            cv2.drawContours(thresh,[cnt],0,(0,255,0),-1)
         elif len(approx)==4:
             print "square"
-            cv2.drawContours(gray,[cnt],0,(0,0,255),-1)
+            cv2.drawContours(thresh,[cnt],0,(0,0,255),-1)
         elif len(approx) == 9:
             print "half-circle"
-            cv2.drawContours(gray,[cnt],0,(255,255,0),-1)
+            cv2.drawContours(thresh,[cnt],0,(255,255,0),-1)
         elif len(approx) > 15:
             print "circle"
-            cv2.drawContours(gray,[cnt],0,(0,255,255),-1)
+            cv2.drawContours(thresh,[cnt],0,(0,255,255),-1)
 
     # Threshold for an optimal value, it may vary depending on the image.
 
     # Display the resulting frame
-    cv2.imshow('frame',gray)
+    cv2.imshow('frame',thresh)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
