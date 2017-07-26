@@ -7,7 +7,7 @@ while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
 
-    ret,thresh = cv2.threshold(frame,135,255,1)
+    ret,thresh = cv2.threshold(frame,130,255,1)
     
     thresh = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
 
