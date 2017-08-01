@@ -13,7 +13,7 @@ while(True):
     # Our operations on the frame come here
     # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    blur = cv2.medianBlur(frame,7)
+    blur = cv2.medianBlur(frame,13)
     #result is dilated for marking the corners, not important
 
     '''
@@ -22,7 +22,7 @@ while(True):
     hsv = cv2.cvtColor(blur, cv2.COLOR_BGR2HSV)
 
     #In testing!!!
-    sensitivity = 7
+    sensitivity = 3
     lower_white = np.array([0,0,255-sensitivity])
     upper_white = np.array([255,sensitivity,255])
 
@@ -33,12 +33,12 @@ while(True):
     draw = cv2.cvtColor(res, cv2.COLOR_BGR2GRAY)    
 
 
-    # Origonal value = 60,0
-    edges = cv2.Canny(image = draw,threshold1 = 60,threshold2 = 62)
-    #Perhaps gray, then edges?
-    edges = cv2.Canny(image = draw,threshold1 = 60,threshold2 = 62)
-    # Finding contours from *edges*
 
+    edges = cv2.Canny(draw,60,0)
+    
+    #Perhaps gray, then edges?
+
+    # Finding contours from *edges*
     contours,h = cv2.findContours(edges,1,2)
     #print(contours)
 
@@ -54,33 +54,23 @@ while(True):
         rect = cv2.minAreaRect(approx)
 
 	tilt = int(rect[2])
-        dimensions = rect[1]
-	dimensionX = dimensions[0]
-	dimensionY = dimensions[1]
-	area = dimensionX * dimensionY
-        print("Rect[2](Tilt) is currently at: ", tilt)
-	print("Dimensions of rectangle", num_squares, "is", rect[1])
-	low = dimensionX * 2
-	high = dimensionX * 2.6
-	#if (rect[2] > -90) & (rect[2] < 90): #Looking for rectangles that are only straight  
-	if (dimensionX * dimensionY > 50): #Looking for rectangles that are bigger than a tiny dot
- 	    if(dimensionY > low) & (dimensionY < high): #Ratio filtering. See notes sheet.
-            #Testing out the ratios
-            #High is at 2.6 and low is at 2. See notes sheet
-                box = cv2.cv.BoxPoints(rect)
-	        box = np.int0(box)
+        print("Rect[2] is currently at: ", tilt)
+	if (rect[2] > -100) & (rect[2] < -70): #Looking for squares that are only straight  
+            #Low point         High point
+            #print("Passed!")
+            box = cv2.cv.BoxPoints(rect)
+	    box = np.int0(box)
 	
-	        cv2.drawContours(draw,[box],0,(0,0,255),2)
-	        cv2.drawContours(frame,[box],0,(0,0,255),2)
-	        print("The center of square " ,num_squares , "Is at: " , box[1])
+	    cv2.drawContours(draw,[box],0,(0,0,255),2)
+	    cv2.drawContours(frame,[box],0,(0,0,255),2)
+	    print("The center of square " ,num_squares , "Is at: " , box[1])
 
     # Threshold for an optimal value, it may vary depending on the image.
 
     # Display the resulting frame
     
-    #cv2.imshow('blur',blur)
+    cv2.imshow('blur',blur)
     cv2.imshow('Draw',draw)
-    cv2.imshow('Pre-draw',pre_draw)
     cv2.imshow('Edges',edges)
     cv2.imshow('frame', frame)
     #cv2.imshow('grey',gray)
